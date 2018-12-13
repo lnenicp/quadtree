@@ -23,22 +23,22 @@ def test_nonexisting_input():
 
 
 def test_missing_output():
-    returncode = get_return_code([sys.executable, 'du2.py', 'valid_input.geojson'])
+    returncode = get_return_code([sys.executable, 'du2.py', 'test_valid_input.geojson'])
     assert returncode == 2
 
 
 def test_success():
-    returncode = get_return_code([sys.executable, 'du2.py', 'valid_input.geojson', 'test_output.geojson'])
+    returncode = get_return_code([sys.executable, 'du2.py', 'test_valid_input.geojson', 'test_output.geojson'])
     assert returncode == 0
 
 
 def test_invalid_mp():
-    returncode = get_return_code([sys.executable, 'du2.py', 'valid_input.geojson', 'test_output.geojson', '-mp', '0'])
+    returncode = get_return_code([sys.executable, 'du2.py', 'test_valid_input.geojson', 'test_output.geojson', '-mp', '0'])
     assert returncode == 2
 
 
 def test_valid_mp():
-    returncode = get_return_code([sys.executable, 'du2.py', 'valid_input.geojson', 'test_output.geojson', '-mp', '1'])
+    returncode = get_return_code([sys.executable, 'du2.py', 'test_valid_input.geojson', 'test_output.geojson', '-mp', '1'])
     assert returncode == 0
 
 
@@ -66,7 +66,7 @@ def test_valid_output_geojson():
 
 # test dělící funkce
 def test_quadtree():
-    with open('valid_input.geojson', encoding='utf-8') as input_geojson:
+    with open('test_valid_input.geojson', encoding='utf-8') as input_geojson:
         input_json = geojson.load(input_geojson)
 
     input_features = input_json.pop('features')
