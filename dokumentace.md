@@ -45,7 +45,7 @@ Soubor ve formátu GeoJSON, jehož hodnota atributu 'cluster_id' určuje přísl
 *calculate_bbox(features)*
  * funkce určí minimální a maximální hodnoty souřadnic vstupních bodů na osách x a y, tedy poskytne souřadnice
  ohraničujícího obdélníku
- 
+
  
 *get_half_value(min_value, max_value)*
  * funkce určí osy stran ohraničujícího obdélníku bodů
@@ -96,7 +96,7 @@ Soubor ve formátu GeoJSON, jehož hodnota atributu 'cluster_id' určuje přísl
 
 ## Popis testů
 
-### Testy ověřující počet argumentů
+### Testy ověřující počet argumentů, validitu vstupního souboru
 
 *get_return_code(input_list)*
  * funkce slouží k získání hodnoty chybového kódu 
@@ -108,6 +108,11 @@ Soubor ve formátu GeoJSON, jehož hodnota atributu 'cluster_id' určuje přísl
 
 *test_nonexisting_input()*
  * ověřuje, zda v případě, kdy vstupní soubor neexistuje, je hodnota chyby rovna 2
+ 
+*test_invalid_input_geojson()*
+ * ověřuje, zda v případě, kdy vstupní soubor není validní (neobsahuje klíče "type" a "features"), je hodnota chyby
+ rovna 2
+
 
 *test_missing_output()*
  * ověřuje, zda v případě, kdy není zadán název výstupního souboru, je hodnota chyby rovna 2
