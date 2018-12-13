@@ -136,27 +136,15 @@ def quadtree(input_features, output_json, max_features, min_x, min_y, max_x, max
         half_y = avg(min_y, max_y)
 
         # body rozradi do skupin podle kvadrantu
-        features1, features2, features3, features4 = split_features(
-            input_features, half_x, half_y)
+        features1, features2, features3, features4 = split_features(input_features, half_x, half_y)
 
         # funkce se vola opakovane pro vsechny kvadranty a body se dale/opakovane deli
         # minima a maxima se predefinuji pro kazdy kvadrant
-        quadtree(
-            features1, output_json, max_features,
-            min_x=min_x, min_y=half_y, max_x=half_x, max_y=max_y
-        )
-        quadtree(
-            features2, output_json, max_features,
-            min_x=half_x, min_y=half_y, max_x=max_x, max_y=max_y
-        )
-        quadtree(
-            features3, output_json, max_features,
-            min_x=min_x, min_y=min_y, max_x=half_x, max_y=half_y
-        )
-        quadtree(
-            features4, output_json, max_features,
-            min_x=half_x, min_y=min_y, max_x=max_x, max_y=half_y
-        )
+        quadtree(features1, output_json, max_features, min_x, half_y, half_x, max_y)
+        quadtree(features2, output_json, max_features, half_x, half_y, max_x, max_y)
+        quadtree(features3, output_json, max_features, min_x, min_y, half_x, half_y)
+        quadtree(features4, output_json, max_features, half_x, min_y, max_x, half_y)
+
     else:
         # v kvadrantu je mene nez zvoleny pocet prvku, dalsi deleni neprobiha
         output_json['features'] += input_features
@@ -186,7 +174,7 @@ def run():
     min_x, min_y, max_x, max_y = calculate_bbox(input_features)
 
     # trideni bodu dle kvadratu, zapis hodnot cluster_id
-    quadtree(input_features, output_json, args.max_points, min_x=min_x, min_y=min_y, max_x=max_x, max_y=max_y)
+    quadtree(input_features, output_json, args.max_points, min_x, min_y, max_x, max_y)
 
     # finální zápis dat
     geojson.dump(output_json, args.output_geojson, indent=2)
