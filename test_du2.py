@@ -43,7 +43,7 @@ def test_valid_mp():
 
 
 # test invalidity vstupního GeoJSONU
-def test_invalid_output_geojson():
+def test_invalid_input_geojson():
     input_filename = 'test_invalid_input.geojson'
 
     with open(input_filename, encoding='utf-8') as input_geojson:
