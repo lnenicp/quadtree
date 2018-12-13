@@ -18,7 +18,7 @@ def test_no_argument():
 
 
 def test_nonexisting_input():
-    returncode = get_return_code([sys.executable, 'du2.py', 'foo.bar'])
+    returncode = get_return_code([sys.executable, 'du2.py', 'inncorect.file'])
     assert returncode == 2
 
 
@@ -42,7 +42,18 @@ def test_valid_mp():
     assert returncode == 0
 
 
-# test na kontrolu validity výstupního GeoJSONU
+# test invalidity vstupního GeoJSONU
+def test_invalid_output_geojson():
+    input_filename = 'test_invalid_input.geojson'
+
+    with open(input_filename, encoding='utf-8') as input_geojson:
+        input_json = geojson.load(input_geojson)
+
+    for key in ('type', 'features'):
+        if key not in input_json.keys():
+            assert returncode == 2
+
+# test validity výstupního GeoJSONU
 def test_valid_output_geojson():
     output_filename = 'test_valid_output.geojson'
 
@@ -64,7 +75,7 @@ def test_quadtree():
 
     min_x, min_y, max_x, max_y = du2.calculate_bbox(input_features)
 
-    max_points = 50
+    max_points = 5
     du2.quadtree(input_features, output_json, max_points, min_x=min_x, min_y=min_y, max_x=max_x, max_y=max_y)
 
     cluster_id_dict = {}
