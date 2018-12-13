@@ -5,7 +5,7 @@ import geojson
 
 import du2
 
-
+# testy na validitu spuštění programu a vstupních dat
 def get_return_code(input_list):
     subproc = subprocess.Popen(input_list)
     subproc.communicate()
@@ -42,6 +42,7 @@ def test_valid_mp():
     assert returncode == 0
 
 
+# test na kontrolu validity výstupního GeoJSONU
 def test_valid_output_geojson():
     output_filename = 'test_valid_output.geojson'
 
@@ -52,6 +53,7 @@ def test_valid_output_geojson():
         assert key in output_json.keys()
 
 
+# test dělící funkce
 def test_quadtree():
     with open('valid_input.geojson', encoding='utf-8') as input_geojson:
         input_json = geojson.load(input_geojson)
