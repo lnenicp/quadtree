@@ -18,7 +18,7 @@ def test_no_argument():
 
 
 def test_nonexisting_input():
-    returncode = get_return_code([sys.executable, 'du2.py', 'inncorect.file'])
+    returncode = get_return_code([sys.executable, 'du2.py', 'incorrect.file'])
     assert returncode == 2
 
 
