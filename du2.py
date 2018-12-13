@@ -64,7 +64,7 @@ def calculate_bbox(features):
     return min_x, min_y, max_x, max_y
 
 
-def get_half_value(min_value, max_value):
+def avg(min_value, max_value):
     '''
     Určí střed mezi minimální a maximalní hodnotou.
     (Využito pro hledání os, podle kterých probíhá dělení do kvadrantů.)
@@ -75,7 +75,7 @@ def get_half_value(min_value, max_value):
     return (min_value + max_value) / 2
 
 
-def sort_features(features, half_x, half_y):
+def split_features(features, half_x, half_y):
     '''
     Rozdělí vstupní data do skupin dle kvadrantu, do kterých přísluší. Přidá se nové properties - 'cluster_id'.
     Zároveň se při tom načte/přidá hodnota příslušného kvadrantu do properties - cluster_id.
@@ -132,11 +132,11 @@ def quadtree(input_features, output_json, max_features, min_x, min_y, max_x, max
     if len(input_features) > max_features:
 
         # vypocte osy, podle kterych se bude delit
-        half_x = get_half_value(min_x, max_x)
-        half_y = get_half_value(min_y, max_y)
+        half_x = avg(min_x, max_x)
+        half_y = avg(min_y, max_y)
 
         # body rozradi do skupin podle kvadrantu
-        features1, features2, features3, features4 = sort_features(
+        features1, features2, features3, features4 = split_features(
             input_features, half_x, half_y)
 
         # funkce se vola opakovane pro vsechny kvadranty a body se dale/opakovane deli
