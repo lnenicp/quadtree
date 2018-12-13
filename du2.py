@@ -94,18 +94,22 @@ def sort_features(features, half_x, half_y):
         coordinates = feature['geometry']['coordinates']
         x = coordinates[0]
         y = coordinates[1]
-        if x < half_x and y > half_y:
+        if x <= half_x and y > half_y:
             feature['properties']['cluster_id'] += '1'
             features1.append(feature)
-        elif x > half_x and y > half_y:
+        elif x > half_x and y >= half_y:
             feature['properties']['cluster_id'] += '2'
             features2.append(feature)
-        elif x < half_x and y < half_y:
+        elif x < half_x and y <= half_y:
             feature['properties']['cluster_id'] += '3'
             features3.append(feature)
-        elif x > half_x and y < half_y:
+        elif x >= half_x and y < half_y:
             feature['properties']['cluster_id'] += '4'
             features4.append(feature)
+        # pokud bod lezi na pruseciku "delicich os"
+        elif x == half_x and y == half_y:
+            feature['properties']['cluster_id'] += '1'
+            features1.append(feature)
     return features1, features2, features3, features4
 
 
