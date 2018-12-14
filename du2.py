@@ -3,7 +3,7 @@ import os
 import sys
 
 import geojson
-
+import turtle
 
 def int_gt_1(string_value):
     int_value = int(string_value)
@@ -113,7 +113,7 @@ def split_features(features, half_x, half_y):
     return features1, features2, features3, features4
 
 
-def quadtree(input_features, output_json, max_features, min_x, min_y, max_x, max_y):
+def quadtree(input_features, output_json, max_features, min_x, min_y, max_x, max_y, draw, screen):
     '''
     Určuje příslušnost vstupních bodů do konkréních clusterů.
     Nejdříve vypočítá "souřadnice os", podle kterých body rozdělí dle kvadrantů. Rozdělí body do kvadrantů.
@@ -129,26 +129,48 @@ def quadtree(input_features, output_json, max_features, min_x, min_y, max_x, max
     :param max_y: maximální souřadnice na ose y
     :return: id příslušného kvadrantu se zapíše/připíše do properties-cluster_id
     '''
+    # vypocte osy, podle kterych se bude delit
+    half_x = avg(min_x, max_x)
+    half_y = avg(min_y, max_y)
+    
     if len(input_features) > max_features:
-
-        # vypocte osy, podle kterych se bude delit
-        half_x = avg(min_x, max_x)
-        half_y = avg(min_y, max_y)
-
         # body rozradi do skupin podle kvadrantu
         features1, features2, features3, features4 = split_features(input_features, half_x, half_y)
 
         # funkce se vola opakovane pro vsechny kvadranty a body se dale/opakovane deli
         # minima a maxima se predefinuji pro kazdy kvadrant
-        quadtree(features1, output_json, max_features, min_x, half_y, half_x, max_y)
-        quadtree(features2, output_json, max_features, half_x, half_y, max_x, max_y)
-        quadtree(features3, output_json, max_features, min_x, min_y, half_x, half_y)
-        quadtree(features4, output_json, max_features, half_x, min_y, max_x, half_y)
+        quadtree(features1, output_json, max_features, min_x, half_y, half_x, max_y, draw, screen)
+        quadtree(features2, output_json, max_features, half_x, half_y, max_x, max_y, draw, screen)
+        quadtree(features3, output_json, max_features, min_x, min_y, half_x, half_y, draw, screen)
+        quadtree(features4, output_json, max_features, half_x, min_y, max_x, half_y, draw, screen)
 
     else:
         # v kvadrantu je mene nez zvoleny pocet prvku, dalsi deleni neprobiha
         output_json['features'] += input_features
 
+        # vykresleni delicih os
+        width = max_x - min_x
+        height = max_y - min_y
+        draw.setposition(min_x, max_y)
+        draw.pendown()
+        draw.forward(width)
+        draw.right(90)
+        draw.forward(height)
+        draw.right(90)
+        draw.forward(width)
+        draw.right(90)
+        draw.forward(height)
+        draw.right(90)
+        draw.penup()
+
+        draw.setposition(half_x, half_y)
+        try:
+            # vypsani/zobrazeni hodnoty 'cluster_id'
+            draw.write(input_features[0]['properties']['cluster_id'])
+        except IndexError:
+            # pokud se v clusteru nenachazi zadny bdd, zapise se N
+            draw.write('N')
+        screen.update()
 
 # fce pro spravne spusteni
 def run():
@@ -173,12 +195,30 @@ def run():
     # výpočet ohraničujícího obdélníku
     min_x, min_y, max_x, max_y = calculate_bbox(input_features)
 
+    # nastaveni velikosti okna a souradnic
+    screen = turtle.Screen()
+    screen.setworldcoordinates(min_x, min_y, max_x, max_y)
+    screen.tracer(0, 0)
+
+    # vykresleni bodu
+    draw = turtle.Turtle()
+    for feature in input_features:
+        coordinates = feature['geometry']['coordinates']
+        x = coordinates[0]
+        y = coordinates[1]
+        draw.penup()
+        draw.setposition(x, y)
+        draw.dot()
+    screen.update()
+
     # trideni bodu dle kvadratu, zapis hodnot cluster_id
-    quadtree(input_features, output_json, args.max_points, min_x, min_y, max_x, max_y)
+    quadtree(input_features, output_json, args.max_points, min_x, min_y, max_x, max_y, draw, screen)
 
     # finální zápis dat
     geojson.dump(output_json, args.output_geojson, indent=2)
     args.output_geojson.close()
+
+    screen.exitonclick()
 
     print('ok')
 

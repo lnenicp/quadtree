@@ -81,6 +81,7 @@ Soubor ve formátu GeoJSON, jehož hodnota atributu 'cluster_id' určuje přísl
   a opakovaného volání funkce pro konkrétní kvadranty, dokud není splněn požadovaný maximální počet bodů
  * v případě, že již není potřeba kvadrant/cluster dále dělit, se data zapíší do listu připraveného k zápisu
   do výstupního souboru
+ * mimo jiné funkce vykreslí dělící osy a zobrazí/vypíše hodnotu 'cluster_id'
 
 *run()*
  * funkce slouží ke spuštění jednotlivých funkcí ve správném pořadí a se správnými parametry
@@ -91,6 +92,7 @@ Soubor ve formátu GeoJSON, jehož hodnota atributu 'cluster_id' určuje přísl
  * předpřipravení výstupního souboru - zkopírování klíčů a hodnot vstupního souboru (s výjimkou klíče 'features' a jeho hodnot)
  * předpřipravení 'listu features' výstupního souboru (prázdný)
  * výpočet ohraničujícího obdélníku
+ * nastaví vhodnou velikost okna pro vykreslení bodů a nálesledně body vykreslí
  * přiřazení bodů do clusterů (volání funkce quadtree, která v sobe volá funkci sort_features)
  * zápis dat do výstupního souboru
 
